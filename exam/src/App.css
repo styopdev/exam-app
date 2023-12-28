@@ -1,6 +1,12 @@
 .App {
   max-width: 60%;
   margin: 100px auto;
+  }
+
+.main-app{
+  height: 100vw;
+  display: flex;
+  flex-direction: column;
 }
 
 .question-container {

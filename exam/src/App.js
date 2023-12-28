@@ -1,46 +1,27 @@
-import { useState } from 'react';
-import './App.css';
-import Question from './components/question';
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import DepartmentSelection from "./components/Department";
+import UserInfoForm from "./components/UserInfo";
+import ExamComponent from "./components/ExamComponent";
+import ExamFinished from "./components/ExamFinished";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 function App() {
-  const [tries, setTries] = useState(5);
-  const [selectedPoints, setSelectedPoints] = useState(0)
-  const [score, setScore] = useState(0);
-
-  const questionList = [
-    { text: 'What?', points: 1, isAnswered: false },
-    { text: 'What?', points: 1, isAnswered: false },
-    { text: 'What?', points: 1, isAnswered: false },
-    { text: 'Where?', points: 1, isAnswered: false },
-    { text: 'Why?', points: 1, isAnswered: false },
-    { text: 'Why?', points: 2, isAnswered: false },
-    { text: 'Who?', points: 2, isAnswered: false },
-    { text: 'Whom?', points: 2, isAnswered: false },
-    { text: 'Who?', points: 2, isAnswered: false },
-    { text: 'Whom?', points: 3, isAnswered: false },
-    { text: 'What?', points: 3, isAnswered: false },
-    { text: 'Where?', points: 3, isAnswered: false },
-    { text: 'Why?', points: 4, isAnswered: false },
-    { text: 'Who?', points: 4, isAnswered: false },
-    { text: 'Whom?', points: 5, isAnswered: false },
-  ];
-
-  function onOpen(points) {
-    setSelectedPoints(selectedPoints + points)
-    setTries(tries - 1);
-  }
-
   return (
-    <div className='App'>
-      <h2>Tries left: {tries}</h2>
-      <h2>Total score:  <span className='gray'>{selectedPoints}</span> / {score}</h2>
-      <div className="question-container">
-        {
-          questionList.map((q) => {
-            return <Question data={q} onOpen={onOpen}></Question>;
-          })
-        }
-      </div>
+    <div>
+      <Routes>
+        <Route path="/" element={<DepartmentSelection />} />
+      </Routes>
+      <Header />
+      <main className="main-app">
+        <Routes>
+          <Route path="/start-exam/:departmentId" element={<UserInfoForm />} />
+          <Route path="/exam-component" element={<ExamComponent />} />
+          <Route path="/exam-finished" element={<ExamFinished />} />
+        </Routes>
+      </main>
+      <Footer />
     </div>
   );
 }

@@ -1,0 +1,21 @@
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  border: 2px solid #cecfd0;
+  border-radius: 5px;
+  color: #ffffff;
+  background-color: #898b8c;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+
+  &:hover {
+    background-color: #efeeee;
+    color: #878a8c;
+    border-color: #ffffff;
+  }
+}
