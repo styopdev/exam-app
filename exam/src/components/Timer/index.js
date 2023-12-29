@@ -7,16 +7,37 @@ const Timer = ({ duration, onTimeout }) => {
   useEffect(() => {
     let timerId;
 
-    if (timeRemaining > 0) {
-      timerId = setInterval(() => {
-        setTimeRemaining((prevTime) => prevTime - 1);
-      }, 1000);
-    } else {
-      onTimeout();
-    }
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden") {
+        clearInterval(timerId);
+      } else {
+        startTimer();
+      }
+    };
 
-    return () => {
+    const startTimer = () => {
+      if (timeRemaining > 0) {
+        timerId = setInterval(() => {
+          setTimeRemaining((prevTime) => {
+            if (prevTime - 1 <= 0) {
+              clearInterval(timerId);
+              onTimeout();
+            }
+            return prevTime - 1;
+          });
+        }, 1000);
+      } else {
+        onTimeout();
+      }
+    };
+
+       startTimer();
+
+       document.addEventListener("visibilitychange", handleVisibilityChange);
+
+       return () => {
       clearInterval(timerId);
+       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [timeRemaining, onTimeout]);
 

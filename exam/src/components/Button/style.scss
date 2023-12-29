@@ -1,5 +1,4 @@
 .button {
-  display: inline-block;
   padding: 10px 20px;
   margin: 5px;
   font-size: 1.5rem;
@@ -12,6 +11,9 @@
   color: #ffffff;
   background-color: #898b8c;
   transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  text-align: center;
+  display: flex;
+  justify-content: center;
 
   &:hover {
     background-color: #efeeee;

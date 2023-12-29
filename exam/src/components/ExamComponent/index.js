@@ -20,11 +20,9 @@ const ExamComponent = () => {
 
   return (
     <div className="exam-container">
-      <div>
-        <Timer duration={1800} onTimeout={handleTimeout} />
-        <QuestionList />
-        <Button name="Finish Exam" onClick={handleFinishExam} />
-      </div>
+      <Timer duration={1800} onTimeout={handleTimeout} />
+      <QuestionList />
+      <Button name="Finish Exam" onClick={handleFinishExam} />
     </div>
   );
 };
