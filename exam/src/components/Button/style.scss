@@ -1,23 +1,18 @@
 .button {
-  padding: 10px 20px;
-  margin: 5px;
-  font-size: 1.5rem;
-  font-weight: 600;
-  text-align: center;
-  text-decoration: none;
-  cursor: pointer;
-  border: 2px solid #cecfd0;
-  border-radius: 5px;
-  color: #ffffff;
-  background-color: #898b8c;
-  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-  text-align: center;
   display: flex;
+  align-items: center;
   justify-content: center;
+  padding: 10px;
+  width: auto;
+  height: auto;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: gray;
+  color: white;
+  transition: background-color 0.3s ease-in-out;
 
   &:hover {
-    background-color: #efeeee;
-    color: #878a8c;
-    border-color: #ffffff;
+    background-color: rgb(204, 192, 192);
   }
 }

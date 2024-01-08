@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function Question ({ data, onOpen }) {
+function Question({ data, onOpen }) {
   const [isOpened, setAnswered] = useState(false);
 
   useEffect(() => {
