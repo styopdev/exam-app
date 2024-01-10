@@ -1,14 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../Button";
 import "./style.scss";
 
-function QuestionModal({ data, onOpen }) {
+function QuestionModal({ data, onOpen, onClose }) {
   const [answer, setAnswer] = useState("");
   const [isOpen, setIsOpen] = useState(true);
+
+  useEffect(() => {
+    setIsOpen(true);
+  }, [data]);
 
   function handleAnswer() {
     onOpen(data.points);
     setIsOpen(false);
+  }
+
+  if (!data) {
+    return null;
   }
 
   return (

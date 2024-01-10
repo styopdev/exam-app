@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Question from "../Question/index";
+import Question from "../Question";
 import "./style.scss";
 import QuestionModal from "../QuestionModal";
 
@@ -8,6 +8,7 @@ function QuestionList() {
   const [selectedPoints, setSelectedPoints] = useState(0);
   const [openModal, setOpenModal] = useState(false);
   const [modalQuestion, setModalQuestion] = useState(null);
+  const [answeredQuestions, setAnsweredQuestions] = useState([]);
 
   const questionList = [
     { text: "What?", points: 1 },
@@ -24,23 +25,62 @@ function QuestionList() {
     { text: "Why?", points: 4 },
     { text: "Who?", points: 4 },
     { text: "Whom?", points: 5 },
+    { text: { placeholder: "questionList" }, points: null },
   ];
+
+  function getRandomQuestion() {
+    const unansweredQuestions = questionList.filter(
+      (question) =>
+        !answeredQuestions.includes(question.text) && question.points !== null
+    );
+
+    if (unansweredQuestions.length === 0) {
+      return null;
+    }
+
+    const randomIndex = Math.floor(Math.random() * unansweredQuestions.length);
+    return unansweredQuestions[randomIndex].text;
+  }
 
   function onOpen(points) {
     setSelectedPoints(selectedPoints + points);
     setTries((prevTries) => prevTries - 1);
     setOpenModal(false);
+    setAnsweredQuestions([...answeredQuestions, modalQuestion.text]);
   }
 
   function openModalHandler(questionData) {
-    setModalQuestion(questionData);
-    setOpenModal(true);
+    if (!openModal) {
+      const randomQuestion = getRandomQuestion();
+
+      if (randomQuestion === null) {
+        alert("No unanswered questions left.");
+        return;
+      }
+
+      const randomPoints =
+        questionData.points === null ? getRandomPoints() : questionData.points;
+
+      setModalQuestion({
+        text: randomQuestion,
+        points: randomPoints,
+        isSpecial: questionData.points === null,
+      });
+
+      setOpenModal(true);
+    } else {
+      alert("Another question is already open. Please answer it first.");
+    }
   }
 
   function closeModal() {
     setOpenModal(false);
     setModalQuestion(null);
   }
+
+  const getRandomPoints = () => {
+    return Math.floor(Math.random() * 5) + 1;
+  };
 
   const renderQuestions = () => {
     if (tries > 0) {
