@@ -3,10 +3,11 @@ import Timer from "../Timer";
 import QuestionList from "../QuestionList";
 import Button from "../Button";
 import { useNavigate } from "react-router-dom";
+import "./style.scss";
 
 const ExamComponent = () => {
-  const [setTimerExpired] = useState(false);
-  const [setExamFinished] = useState(false);
+  const [timerExpired, setTimerExpired] = useState(false);
+  const [examFinished, setExamFinished] = useState(false);
   const navigate = useNavigate();
 
   const handleTimeout = () => {
@@ -22,7 +23,9 @@ const ExamComponent = () => {
     <div className="exam-container">
       <Timer duration={600} onTimeout={handleTimeout} />
       <QuestionList />
-      <Button name="Finish Exam" onClick={handleFinishExam} />
+      <div className="finish-button">
+        <Button name="Finish Exam" onClick={handleFinishExam} />
+      </div>
     </div>
   );
 };

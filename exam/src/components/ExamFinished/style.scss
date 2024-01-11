@@ -1,14 +1,21 @@
 .exam-finished-container {
   text-align: center;
-  width: 50%;
-  margin: 20px auto;
-  padding: 20px;
-  border: 2px solid #ccc;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   font-family: "YourCustomFont", sans-serif;
   background-color: #fff;
   color: #333;
+  box-sizing: border-box;
+
+  .exam-finished {
+    border: 2px solid gray;
+    border-radius: 10px;
+    margin: 20px;
+    padding: 20px;
+  }
 
   h1 {
     font-size: 24px;

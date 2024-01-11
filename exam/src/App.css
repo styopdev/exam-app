@@ -4,15 +4,9 @@
   }
 
 .main-app{
-  height: 100vw;
+  height: 80vh;
   display: flex;
   flex-direction: column;
-}
-
-.question-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
 }
 
 .gray {

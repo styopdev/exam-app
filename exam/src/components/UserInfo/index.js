@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { auth } from "../../config/firebase";
+import { auth, firestore } from "../../config/firebase";
 import {
   sendSignInLinkToEmail,
-  isSignInWithEmailLink,
-  signInWithEmailLink,
+  createUserWithEmailAndPassword,
 } from "firebase/auth";
 import "./style.scss";
 import ExamInfo from "../ExamInfo";
@@ -32,39 +31,16 @@ const UserInfoForm = () => {
     return email.includes("@");
   };
 
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-
-    if (name && email && isEmailValid) {
-      try {
-        await sendSignInLink();
-        saveToLocalStorage(email, name);
-        setShowExamInfo(true);
-      } catch (error) {
-        console.error("Error handling form submission:", error);
-        alert("An error occurred. Please try again.");
-      }
-    }
-  };
-
-  const sendSignInLink = async () => {
-    await sendSignInLinkToEmail(auth, email, {
-      url: "https://https://exam-app-e70eb.com/",
-      handleCodeInApp: true,
-    });
-  };
-
-  const saveToLocalStorage = (email, name) => {
-    window.localStorage.setItem("emailForSignIn", email);
-    window.localStorage.setItem("nameForSignIn", name);
-  };
-
   useEffect(() => {
     const emailInput = emailInputRef.current;
 
     if (emailInput) {
       const handleEmailBlur = () => {
         setShowExamInfo(() => name && email && isEmailValid);
+
+        if (name && email && isEmailValid) {
+          handleFormSubmit();
+        }
       };
 
       emailInput.addEventListener("blur", handleEmailBlur);
@@ -75,55 +51,74 @@ const UserInfoForm = () => {
     }
   }, [name, email, isEmailValid]);
 
-  useEffect(() => {
-    const handleEmailVerification = async () => {
-      if (isSignInWithEmailLink(window.location.href)) {
-        const email = window.localStorage.getItem("emailForSignIn");
-        const name = window.localStorage.getItem("nameForSignIn");
+  const handleFormSubmit = async () => {
+    if (name && email && isEmailValid) {
+      try {
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          "dummyPassword"
+        );
 
-        try {
-          const result = await signInWithEmailLink(
-            auth,
-            email,
-            window.location.href
-          );
-          const user = result.user;
+        const user = userCredential.user;
+        await saveUserToFirestore(user.uid, name, email);
 
-          await user.updateProfile({ displayName: name });
+        await sendSignInLink();
 
-          console.log("User signed in and profile updated:", user);
-          alert(`Welcome, ${name}! You are now signed in.`);
-        } catch (error) {
-          console.error("Error signing in with email link:", error);
-          alert("Error signing in with email link. Please try again.");
-        }
+        saveToLocalStorage(email, name);
+
+        setShowExamInfo(true);
+      } catch (error) {
+        console.error("Error handling form submission:", error);
       }
-    };
+    }
+  };
 
-    handleEmailVerification();
-  }, []);
+  const sendSignInLink = async () => {
+    await sendSignInLinkToEmail(auth, email, {
+      url: "https://exam-app-e70eb.com/",
+      handleCodeInApp: true,
+    });
+  };
+
+  const saveUserToFirestore = async (userId, name, email) => {
+    const usersCollection = firestore.collection("users");
+
+    await usersCollection.doc(userId).set({
+      name,
+      email,
+      departmentId,
+    });
+  };
+
+  const saveToLocalStorage = (email, name) => {
+    window.localStorage.setItem("emailForSignIn", email);
+    window.localStorage.setItem("nameForSignIn", name);
+  };
 
   return (
     <div className="user-info-container">
-      <h2>Start Exam - Department {departmentId}</h2>
-      <form onSubmit={handleFormSubmit}>
-        <label>
-          Name:
-          <input type="text" value={name} onChange={handleNameChange} />
-        </label>
-        <br />
-        <label>
-          Email:
-          <input
-            ref={emailInputRef}
-            type="email"
-            value={email}
-            onChange={handleEmailChange}
-          />
-        </label>
-      </form>
+      <div className="user-info">
+        <h2>Start Exam - Department {departmentId}</h2>
+        <form>
+          <label>
+            Name:
+            <input type="text" value={name} onChange={handleNameChange} />
+          </label>
+          <br />
+          <label>
+            Email:
+            <input
+              ref={emailInputRef}
+              type="email"
+              value={email}
+              onChange={handleEmailChange}
+            />
+          </label>
+        </form>
 
-      {showExamInfo && <ExamInfo />}
+        {showExamInfo && <ExamInfo />}
+      </div>
     </div>
   );
 };

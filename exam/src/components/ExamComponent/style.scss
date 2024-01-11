@@ -1,8 +1,7 @@
 .exam-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #fff;
+  .finish-button {
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+  }
 }

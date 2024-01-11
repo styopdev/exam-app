@@ -3,12 +3,7 @@ import DepartmentLink from "../DepartmentLink";
 import "./style.scss";
 
 function DepartmentSelection() {
-  const departments = [
-    "department1",
-    "department2",
-    "department3",
-    "department4",
-  ];
+  const departments = ["HTML", "CSS", "JavaScript", "React"];
 
   return (
     <div className="department-selection">
