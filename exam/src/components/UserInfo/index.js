@@ -98,7 +98,7 @@ const UserInfoForm = () => {
 
   return (
     <div className="user-info-container">
-      <div className="user-info">
+      <div className="user-info"> 
         <h2>Start Exam - Department {departmentId}</h2>
         <form>
           <label>
