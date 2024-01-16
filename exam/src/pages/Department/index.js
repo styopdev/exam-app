@@ -1,10 +1,10 @@
 import React from "react";
-import DepartmentLink from "../DepartmentLink";
+import DepartmentLink from "components/DepartmentLink";
 import "./style.scss";
 
-function DepartmentSelection() {
-  const departments = ["HTML", "CSS", "JavaScript", "React"];
+const departments = ["HTML", "CSS", "JavaScript", "React"];
 
+function DepartmentSelection() {
   return (
     <div className="department-selection">
       <h2>Choose a Department</h2>

@@ -1,15 +1,12 @@
 import React from "react";
 import "./style.scss";
-import Animation from "../Animation/index";
+import Animation from "components/Animation";
 
 const Header = () => {
-   
   return (
     <div className="header">
-      <div className="animation-container">
-        <Animation />
-      </div>
-      <h1>EXAM</h1>
+      <Animation />
+      <h1> EXAM</h1>
     </div>
   );
 };

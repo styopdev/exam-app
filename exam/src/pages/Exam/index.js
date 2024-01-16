@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import Timer from "../Timer";
-import QuestionList from "../QuestionList";
-import Button from "../Button";
+import Timer from "components/Timer";
+import QuestionList from "components/QuestionList";
+import Button from "components/Button";
 import { useNavigate } from "react-router-dom";
 import "./style.scss";
 
-const ExamComponent = () => {
+const Exam = () => {
   const [timerExpired, setTimerExpired] = useState(false);
   const [examFinished, setExamFinished] = useState(false);
   const navigate = useNavigate();
@@ -30,4 +30,4 @@ const ExamComponent = () => {
   );
 };
 
-export default ExamComponent;
+export default Exam;
