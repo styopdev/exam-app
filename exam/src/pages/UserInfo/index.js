@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { auth, firestore } from "../../config/firebase";
+import { auth, firestore } from "config/firebase";
 import {
   sendSignInLinkToEmail,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import "./style.scss";
-import ExamInfo from "../ExamInfo";
+import ExamInfo from "components/ExamInfo";
+import Button from "components/Button";
 
 const UserInfoForm = () => {
   const { departmentId } = useParams();
@@ -31,16 +32,18 @@ const UserInfoForm = () => {
     return email.includes("@");
   };
 
+  const handleLoginButtonClick = () => {
+    if (name && email && isEmailValid) {
+      handleFormSubmit();
+    }
+  };
+
   useEffect(() => {
     const emailInput = emailInputRef.current;
 
     if (emailInput) {
       const handleEmailBlur = () => {
         setShowExamInfo(() => name && email && isEmailValid);
-
-        if (name && email && isEmailValid) {
-          handleFormSubmit();
-        }
       };
 
       emailInput.addEventListener("blur", handleEmailBlur);
@@ -52,25 +55,23 @@ const UserInfoForm = () => {
   }, [name, email, isEmailValid]);
 
   const handleFormSubmit = async () => {
-    if (name && email && isEmailValid) {
-      try {
-        const userCredential = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          "dummyPassword"
-        );
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        "dummyPassword"
+      );
 
-        const user = userCredential.user;
-        await saveUserToFirestore(user.uid, name, email);
+      const user = userCredential.user;
+      await saveUserToFirestore(user.uid, name, email);
 
-        await sendSignInLink();
+      await sendSignInLink();
 
-        saveToLocalStorage(email, name);
+      saveToLocalStorage(email, name);
 
-        setShowExamInfo(true);
-      } catch (error) {
-        console.error("Error handling form submission:", error);
-      }
+      setShowExamInfo(true);
+    } catch (error) {
+      console.error("Error handling form submission:", error);
     }
   };
 
@@ -115,6 +116,11 @@ const UserInfoForm = () => {
               onChange={handleEmailChange}
             />
           </label>
+          <Button
+            name="Login"
+            type="button"
+            onClick={handleLoginButtonClick}
+          ></Button>
         </form>
 
         {showExamInfo && <ExamInfo />}

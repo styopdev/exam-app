@@ -7,7 +7,7 @@ const ExamInfo = () => {
   const navigate = useNavigate();
 
   const handleOKClick = () => {
-    navigate("/exam-component");
+    navigate("/exam");
   };
 
   return (

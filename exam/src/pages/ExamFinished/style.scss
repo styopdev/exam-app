@@ -1,11 +1,15 @@
 .exam-finished-container {
   text-align: center;
+<<<<<<< HEAD:exam/src/components/ExamFinished/style.scss
   height: 70vh;
+=======
+  height: 100%;
+>>>>>>> a797436:exam/src/pages/ExamFinished/style.scss
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-family: "YourCustomFont", sans-serif;
+  font-family: sans-serif;
   background-color: #fff;
   color: #333;
   box-sizing: border-box;
