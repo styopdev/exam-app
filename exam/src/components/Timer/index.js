@@ -1,45 +1,42 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./style.scss";
 
 const Timer = ({ duration, onTimeout }) => {
   const [timeRemaining, setTimeRemaining] = useState(duration);
+  const timerRef = useRef(null);
 
   useEffect(() => {
-    let timerId;
-
     const handleVisibilityChange = () => {
       if (document.visibilityState === "hidden") {
-        clearInterval(timerId);
+        clearInterval(timerRef.current);
       } else {
         startTimer();
       }
     };
 
     const startTimer = () => {
-      if (timeRemaining > 0) {
-        timerId = setInterval(() => {
-          setTimeRemaining((prevTime) => {
-            if (prevTime - 1 <= 0) {
-              clearInterval(timerId);
-              onTimeout();
-            }
-            return prevTime - 1;
-          });
-        }, 1000);
-      } else {
-        onTimeout();
-      }
+      timerRef.current = setInterval(() => {
+        setTimeRemaining((prevTime) => {
+          const newTime = prevTime - 1;
+          if (newTime <= 0) {
+            clearInterval(timerRef.current);
+            onTimeout();
+            return 0;
+          }
+          return newTime;
+        });
+      }, 1000);
     };
 
-       startTimer();
+    startTimer();
 
-       document.addEventListener("visibilitychange", handleVisibilityChange);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
-       return () => {
-      clearInterval(timerId);
-       document.removeEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      clearInterval(timerRef.current);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [timeRemaining, onTimeout]);
+  }, [onTimeout]);
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);

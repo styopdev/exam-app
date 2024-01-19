@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 function Question({ data, onOpen }) {
   const [isOpened, setAnswered] = useState(false);
@@ -23,12 +23,28 @@ function Question({ data, onOpen }) {
     }
   }
 
+  const renderContent = () => {
+    if (data.text.placeholder === "questionList" && data.points === null) {
+      return (
+        <div>
+          <div>?</div>
+          <div> *2</div>
+        </div>
+      );
+    }
+    return <>{data.points}</>;
+  };
+
   return (
     <div
       onClick={open}
-      className={"box box-" + data.points + (isOpened ? " opened" : "")}
+      className={`box box-${data.points} ${isOpened ? "opened" : ""} ${
+        data.text.placeholder === "questionList" && data.points === null
+          ? "special-question"
+          : ""
+      }`}
     >
-      {data.points}
+      {renderContent()}
     </div>
   );
 }

@@ -2,6 +2,22 @@
   .finish-button {
     display: flex;
     justify-content: center;
-    padding: 15px;
+    padding: 10px;
+
+    button {
+      font-size: 24px;
+      background-color: #176f97;
+      color: white;
+      padding: 15px 30px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #809fc0;
+      }
+    }
   }
 }

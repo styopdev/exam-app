@@ -18,6 +18,7 @@ function QuestionList() {
     { text: "Why?", points: 1 },
     { text: "Who?", points: 2 },
     { text: "Whom?", points: 2 },
+    { text: { placeholder: "questionList" }, points: null },
     { text: "Who?", points: 2 },
     { text: "Whom?", points: 3 },
     { text: "What?", points: 3 },
@@ -25,7 +26,6 @@ function QuestionList() {
     { text: "Why?", points: 4 },
     { text: "Who?", points: 4 },
     { text: "Whom?", points: 5 },
-    { text: { placeholder: "questionList" }, points: null },
   ];
 
   function getRandomQuestion() {
@@ -59,7 +59,9 @@ function QuestionList() {
       }
 
       const randomPoints =
-        questionData.points === null ? getRandomPoints() : questionData.points;
+        questionData.points === null
+          ? getRandomPoints()
+          : questionData.points * 2;
 
       setModalQuestion({
         text: randomQuestion,
@@ -87,7 +89,14 @@ function QuestionList() {
       return questionList.map((question, index) => (
         <Question
           key={`${question.text}-${index}`}
-          data={question}
+          data={
+            question.text.placeholder === "questionList"
+              ? {
+                  ...question,
+                  points: question.points !== null ? question.points * 2 : null,
+                }
+              : question
+          }
           onOpen={() => openModalHandler(question)}
         />
       ));
@@ -96,10 +105,14 @@ function QuestionList() {
 
   return (
     <div className="question-list">
-      <h2>Tries left: {tries}</h2>
-      <h2>
-        Total score: <span className="gray">{selectedPoints}</span>
-      </h2>
+      <div className="question-info">
+        <h2>
+          Tries left: <span className="tries">{tries}</span>
+        </h2>
+        <h2>
+          Total score: <span className="selected-points">{selectedPoints}</span>
+        </h2>
+      </div>
       <div className="question-container">{renderQuestions()}</div>
       {openModal && modalQuestion && (
         <QuestionModal
