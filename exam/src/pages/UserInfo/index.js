@@ -18,8 +18,13 @@ const UserInfoForm = () => {
   const emailInputRef = useRef(null);
 
   const handleNameChange = (e) => {
-    setName(e.target.value);
+    const enteredName = e.target.value;
+    setName(capitalizeFirstLetter(enteredName));
     setShowExamInfo(false);
+  };
+
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
   const handleEmailChange = (e) => {
@@ -32,18 +37,16 @@ const UserInfoForm = () => {
     return email.includes("@");
   };
 
-  const handleLoginButtonClick = () => {
-    if (name && email && isEmailValid) {
-      handleFormSubmit();
-    }
-  };
-
   useEffect(() => {
     const emailInput = emailInputRef.current;
 
     if (emailInput) {
       const handleEmailBlur = () => {
         setShowExamInfo(() => name && email && isEmailValid);
+
+        if (name && email && isEmailValid) {
+          handleFormSubmit();
+        }
       };
 
       emailInput.addEventListener("blur", handleEmailBlur);
@@ -68,6 +71,8 @@ const UserInfoForm = () => {
       await sendSignInLink();
 
       saveToLocalStorage(email, name);
+
+      localStorage.clear();
 
       setShowExamInfo(true);
     } catch (error) {
@@ -99,12 +104,17 @@ const UserInfoForm = () => {
 
   return (
     <div className="user-info-container">
-      <div className="user-info"> 
+      <div className="user-info">
         <h2>Start Exam - Department {departmentId}</h2>
         <form>
           <label>
             Name:
-            <input type="text" value={name} onChange={handleNameChange} />
+            <input
+              type="text"
+              value={name}
+              onChange={handleNameChange}
+              placeholder="Name"
+            />
           </label>
           <br />
           <label>
@@ -114,13 +124,10 @@ const UserInfoForm = () => {
               type="email"
               value={email}
               onChange={handleEmailChange}
+              placeholder="Email"
             />
           </label>
-          <Button
-            name="Login"
-            type="button"
-            onClick={handleLoginButtonClick}
-          ></Button>
+          <Button name="Login" onClick={handleFormSubmit}></Button>
         </form>
 
         {showExamInfo && <ExamInfo />}

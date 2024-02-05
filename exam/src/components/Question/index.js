@@ -1,30 +1,36 @@
-import React, { useEffect, useState } from "react";
+// Question.js
+import React, { useState } from "react";
+import Modal from "./Modal";
 
 function Question({ data, onOpen }) {
   const [isOpened, setAnswered] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-  useEffect(() => {
-    setAnswered(data.isAnswered);
-  }, [data.isAnswered]);
-
-  function open() {
+  const open = () => {
     if (!isOpened) {
-      const userConfirmed = window.confirm(
-        "Are you sure you want to open this question?"
-      );
-      if (!userConfirmed) {
-        return;
-      }
-      setAnswered(true);
-      onOpen(data.points);
+      setShowModal(true);
     } else {
       setAnswered(false);
       onOpen(data.points);
     }
-  }
+  };
+
+  const onConfirm = () => {
+    setShowModal(false);
+    setAnswered(true);
+    onOpen(data.points);
+  };
+
+  const onCancel = () => {
+    setShowModal(false);
+  };
 
   const renderContent = () => {
-    if (data.text.placeholder === "questionList" && data.points === null) {
+    if (
+      data.text &&
+      data.text.placeholder === "questionList" &&
+      data.points === null
+    ) {
       return (
         <div>
           <div>?</div>
@@ -32,20 +38,34 @@ function Question({ data, onOpen }) {
         </div>
       );
     }
-    return <>{data.points}</>;
+    return <div>{data.points}</div>;
   };
 
   return (
-    <div
-      onClick={open}
-      className={`box box-${data.points} ${isOpened ? "opened" : ""} ${
-        data.text.placeholder === "questionList" && data.points === null
-          ? "special-question"
-          : ""
-      }`}
-    >
-      {renderContent()}
-    </div>
+    <>
+      <div
+        onClick={open}
+        className={`box box-${data.points} ${isOpened ? "opened" : ""} ${
+          data.text &&
+          data.text.placeholder === "questionList" &&
+          data.points === null
+            ? "special-question"
+            : ""
+        }`}
+      >
+        {renderContent()}
+      </div>
+
+      {showModal && (
+        <Modal
+          message={`Are you sure you want to open this question with ${data.points} points?`}
+          onConfirm={onConfirm}
+          onCancel={onCancel}
+          confirmLabel="Confirm"
+          cancelLabel="Cancel"
+        />
+      )}
+    </>
   );
 }
 

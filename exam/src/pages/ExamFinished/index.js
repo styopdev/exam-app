@@ -6,7 +6,10 @@ const ExamFinished = () => {
     <div className="exam-finished-container">
       <div className="exam-finished">
         <h1>Exam Finished</h1>
-        <p>Congratulations! You have successfully completed the exam.</p>
+        <h3>Congratulations! You have successfully completed the exam.</h3>
+        <h2>
+          Please note that the points may be subject to review by the teacher.
+        </h2>
       </div>
     </div>
   );
